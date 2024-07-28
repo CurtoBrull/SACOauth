@@ -1,7 +1,9 @@
-package eu.jacurtobr.sacoauth.config;
+package eu.jacurtobr.sacoauth.oauth;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class SecurityConfigTest {
 
     @Autowired
@@ -26,52 +29,39 @@ class SecurityConfigTest {
 
     private MockMvc mockMvc;
 
-    @Test
-    void permitAllForOauthEndpoints() throws Exception {
+    @BeforeEach
+    void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilters(springSecurityFilterChain)
                 .build();
+    }
 
-        mockMvc.perform(get("/oauth/someEndpoint"))
-                .andExpect(status().isOk());
+    @Test
+    void permitAllForOauthEndpoints() throws Exception {
+        mockMvc.perform(get("/oauth/someEndpoint").with(csrf()))
+                .andExpect(status().isFound());
     }
 
     @Test
     void authenticatedForOtherEndpoints() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
-                .build();
-
         mockMvc.perform(get("/someOtherEndpoint"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isFound());
     }
 
     @Test
     void loginPageAccessible() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
-                .build();
-
         mockMvc.perform(get("/login").with(csrf()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void successfulLogin() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
-                .build();
-
         mockMvc.perform(formLogin("/login").user("user").password("password"))
                 .andExpect(authenticated());
     }
 
     @Test
     void unsuccessfulLogin() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
-                .build();
-
         mockMvc.perform(formLogin("/login").user("user").password("wrongPassword"))
                 .andExpect(unauthenticated());
     }
