@@ -118,13 +118,13 @@ public class SecurityConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient client = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("app-client")
+                .clientId("client-oauth")
                 .clientSecret("{noop}secret")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/app-client")
-                .redirectUri("http://127.0.0.1:8080/login/authorized")
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/client-oauth")
+                .redirectUri("http://127.0.0.1:8080/authorized")
                 .postLogoutRedirectUri("http://127.0.0.1:8080/logout")
                 .scope("read")
                 .scope("write")
