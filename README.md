@@ -1,6 +1,6 @@
 # Aprendiendo a usar OAuth2 con Spring Security
 
-Este proyecto funciona junto a un cliente OAuth2 que se encuentra en el siguiente repositorio: [sacooauth-client](https://github.com/CurtoBrull/clientOauth).
+Este proyecto alojado en [SACOauth](https://github.com/CurtoBrull/SACOauth) funciona junto a un cliente OAuth2 que se encuentra en el siguiente repositorio: [sacooauth-client](https://github.com/CurtoBrull/clientOauth).
 
 ## 1. Crear un proyecto Spring Boot
 
@@ -215,3 +215,40 @@ Para ejecutar la aplicación, se puede utilizar un IDE con soporte para Spring B
 Una vez que la aplicación esté en funcionamiento, se puede acceder a ella en un navegador web visitando la URL `http://localhost:9001`.
 
 Este proyecto funciona junto a un cliente OAuth2 que se encuentra en el siguiente repositorio: [sacooauth-client](https://github.com/CurtoBrull/clientOauth).
+
+## 5. Funcionamiento de la aplicación junto al cliente
+
+Una vez iniciado el servidor de autorización, podemos iniciar la aplicación cliente [sacooauth-client](https://github.com/CurtoBrull/clientOauth).
+
+![img.png](src/main/resources/static/initApps.png)
+
+Al acceder a la ruta `http://127.0.0.1:8080/oauth2/authorization/client-oauth`, la aplicación redirigirá al servidor de autorización para autenticar al usuario.
+
+![login.png](src/main/resources/static/login.png)
+
+Nos autenticamos con las credenciales `user` y `password` y damos permiso a la aplicación cliente para conseguir el code que usaremos en postman.
+
+![img.png](src/main/resources/static/code.png)
+
+Abrimos postman y hacemos una petición POST a la ruta `http://127.0.0.1:9001/oauth2/token` con los siguientes parámetros:
+
+- code: el código que hemos obtenido anteriormente
+- grant_type: authorization_code
+- redirect_uri: http://127.0.0.1:8080/authorized
+
+![img.png](src/main/resources/static/postmanPOSTCode.png)
+
+Copiamos el access_token que nos devuelve el servidor de autorización y hacemos una petición GET a la ruta `http://127.0.0.1:8080/messages` con el access_token como Bearer token en Authorization.
+
+Si todo ha ido bien, obtendremos el mensaje "Hello, World!".
+
+![img.png](src/main/resources/static/getMessage.png)
+
+Igualmente para la ruta POST `http://127.0.0.1:8080/createMessage` con el access_token como Bearer token en Authorization y un body con el mensaje que queremos crear.
+Si todo ha ido bien, obtendremos el mensaje creado.
+
+![img.png](src/main/resources/static/createMessage.png)
+
+## 6. Conclusión
+
+En este proyecto, hemos aprendido a usar OAuth2 con Spring Security para autenticar y autorizar a los usuarios en una aplicación Spring Boot. Hemos configurado la aplicación cliente para interactuar con un servidor de autorización OAuth2 y hemos implementado un controlador REST para manejar las solicitudes HTTP. Además, hemos utilizado JWT (JSON Web Tokens) para asegurar la comunicación entre el cliente y el servidor.
