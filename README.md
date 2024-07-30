@@ -1,5 +1,7 @@
 # Aprendiendo a usar OAuth2 con Spring Security
 
+Este proyecto funciona junto a un cliente OAuth2 que se encuentra en el siguiente repositorio: [sacooauth-client](https://github.com/CurtoBrull/clientOauth).
+
 ## 1. Crear un proyecto Spring Boot
 
 Para crear un proyecto Spring Boot, se puede utilizar [Spring Initializr](https://start.spring.io/) o un IDE con soporte para Spring Boot, como [Spring Tool Suite](https://spring.io/tools) o [IntelliJ IDEA](https://www.jetbrains.com/idea/).
@@ -211,3 +213,5 @@ Define los parámetros y comportamientos del servidor de autorización, aseguran
 Para ejecutar la aplicación, se puede utilizar un IDE con soporte para Spring Boot, como Spring Tool Suite o IntelliJ IDEA, o ejecutar el comando `mvn spring-boot:run` en la línea de comandos.
 
 Una vez que la aplicación esté en funcionamiento, se puede acceder a ella en un navegador web visitando la URL `http://localhost:9001`.
+
+Este proyecto funciona junto a un cliente OAuth2 que se encuentra en el siguiente repositorio: [sacooauth-client](https://github.com/CurtoBrull/clientOauth).
